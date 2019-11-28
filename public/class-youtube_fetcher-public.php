@@ -108,7 +108,6 @@ class Youtube_fetcher_Public {
 		function video_list_shortcode(){
 			$yf_list_setting_arr = get_option( 'yf_list_setting' );
 			$video_list = json_decode(file_get_contents('https://www.googleapis.com/youtube/v3/search?order=date&part=snippet&channelId='.$yf_list_setting_arr["channel_id"].'&maxResults='.$yf_list_setting_arr["max_result"].'&key='. $yf_list_setting_arr["api_key"].''));
-			var_dump($video_list);
 			$getpage = prev($parts);; 
 			if(!is_numeric ($getpage)):  
 				$getpage = 1;
@@ -157,8 +156,6 @@ class Youtube_fetcher_Public {
 			$yf_list_setting_arr = get_option( 'yf_list_setting' );
 			$url_srting ='https://www.googleapis.com/youtube/v3/search?order=date&part=snippet&channelId='.$yf_list_setting_arr["channel_id"].'&maxResults='.$yf_list_setting_arr["max_result"].'&key='. $yf_list_setting_arr["api_key"].'&pageToken='.$pagetoken;
 			$video_list = json_decode(file_get_contents($url_srting));
-			var_dump($url_srting);
-			
 			$getpage = prev($parts);; 
 			if(!is_numeric ($getpage)):  
 				$getpage = 1;
@@ -179,9 +176,6 @@ class Youtube_fetcher_Public {
 				}
 			wp_send_json(array('success' => true,  'video_thum' =>$video_thum, 'prevPageToken' => $video_list->prevPageToken, 'nextPageToken' => $video_list->nextPageToken));
 			wp_die();
-			echo '<nav aria-label="Page navigation example"><ul class="pagination">
-			<li class="page-item"><a class="page-link" data-id="'.$video_list->prevPageToken.'">Previous</a></li>
-			<li class="page-item"><a class="page-link" data-id="'.$video_list->nextPageToken.'">Next</a></li></ul></nav>';
 	}
 
 }
