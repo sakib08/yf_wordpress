@@ -1,0 +1,10 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+ li.page-item {
+    margin-left: 0;
+}
+.page-link{
+    padding: 5px 15px;
+}
