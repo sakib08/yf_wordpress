@@ -105,9 +105,11 @@ class Youtube_fetcher_Public {
         ));
 	}
 	public function yf_video_list_shortcode(){
-		function video_list_shortcode(){
+		function video_list_shortcode($atts){
 			$yf_list_setting_arr = get_option( 'yf_list_setting' );
-			$video_list = json_decode(file_get_contents('https://www.googleapis.com/youtube/v3/search?order=date&part=snippet&channelId='.$yf_list_setting_arr["channel_id"].'&maxResults='.$yf_list_setting_arr["max_result"].'&key='. $yf_list_setting_arr["api_key"].''));
+			$api_url = 'https://www.googleapis.com/youtube/v3/search?order=date&part=snippet&channelId='.$atts["channelid"].'&maxResults='.$atts["maxresults"].'&key='. $yf_list_setting_arr["api_key"].'';
+			$video_list = json_decode(file_get_contents($api_url));
+
 			$getpage = prev($parts);; 
 			if(!is_numeric ($getpage)):  
 				$getpage = 1;
@@ -115,7 +117,7 @@ class Youtube_fetcher_Public {
 			$nb_elem_per_page = 12;
 			$page = isset($getpage)?intval($getpage-1):0;
 			$number_of_pages = intval(count($video_list->items)/$nb_elem_per_page)+1;
-			echo '<div class="row yf_content">';
+			echo '<div class="row yf_content"><input type="hidden" class="channelid" value="'.$atts["channelid"].'"/><input type="hidden" class="maxresults" value="'.$atts["maxresults"].'"/>';
 				foreach(array_slice($video_list->items, $page*$nb_elem_per_page, $nb_elem_per_page) as $item)
 				{
 					if(isset($item->id->videoId)){
@@ -153,8 +155,11 @@ class Youtube_fetcher_Public {
 			global $wpdb;
 			$params = $_POST;
 			$pagetoken = sanitize_text_field($params['pagetoken']);
+			$channelid = sanitize_text_field($params['channelid']);
+			$maxresults = sanitize_text_field($params['maxresults']);
 			$yf_list_setting_arr = get_option( 'yf_list_setting' );
-			$url_srting ='https://www.googleapis.com/youtube/v3/search?order=date&part=snippet&channelId='.$yf_list_setting_arr["channel_id"].'&maxResults='.$yf_list_setting_arr["max_result"].'&key='. $yf_list_setting_arr["api_key"].'&pageToken='.$pagetoken;
+			$url_srting ='https://www.googleapis.com/youtube/v3/search?order=date&part=snippet&channelId='.$channelid.'&maxResults='.$maxresults.'&key='. $yf_list_setting_arr["api_key"].'&pageToken='.$pagetoken;
+			//var_dump($url_srting);wp_die();
 			$video_list = json_decode(file_get_contents($url_srting));
 			$getpage = prev($parts);; 
 			if(!is_numeric ($getpage)):  
@@ -164,6 +169,7 @@ class Youtube_fetcher_Public {
 			$page = isset($getpage)?intval($getpage-1):0;
 			$number_of_pages = intval(count($video_list->items)/$nb_elem_per_page)+1;
 			$video_thum = [];
+			$inputhidden = '<input type="hidden" class="channelid" value="'.$channelid.'"/><input type="hidden" class="maxresults" value="'.$maxresults.'"/>';
 				foreach($video_list->items as $item)
 				{
 					if(isset($item->id->videoId)){
@@ -174,7 +180,7 @@ class Youtube_fetcher_Public {
 							array_push($video_thum, $video_content);
 						}
 				}
-			wp_send_json(array('success' => true,  'video_thum' =>$video_thum, 'prevPageToken' => $video_list->prevPageToken, 'nextPageToken' => $video_list->nextPageToken));
+			wp_send_json(array('success' => true,  'video_thum' =>$video_thum, 'inputhidden' => $inputhidden, 'prevPageToken' => $video_list->prevPageToken, 'nextPageToken' => $video_list->nextPageToken));
 			wp_die();
 	}
 

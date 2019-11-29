@@ -28,9 +28,7 @@
 	 * Although scripts in the WordPress core, Plugins and Themes may be
 	 * practising this, we should strive to set a better example in our own work.
 	 */
-	$('.col-md-4').on('click','.youtube_list_save',function(){
-		var channel_id = $('#channel_id').val();
-		var max_result = $('#max_result').val();
+	$('.col-md-6').on('click','.youtube_list_save',function(){
 		var api_key = $('#api_key').val();
 		$.ajax({
 			type        : 'POST', 
@@ -39,22 +37,27 @@
 			data: {
 				'action': 'list_yf_setting',
 				'ajax_nonce': yf.nonce,
-				'channel_id': channel_id,
-				'max_result': max_result,
 				'api_key' : api_key,
 			},
 			success: function (response) {
-				console.log(response);
-				// setTimeout(function(){
-				// 			swal("Request Send Successfully", "", "success")
-				// 			.then(success)
-				// 			function success(response) {
-				// 				swal.close()
-				// 				location.reload();
-				// 			}   
-				// 		}, 500); 
+				Swal.fire({
+					icon: 'success',
+					title: 'Api save',
+					showConfirmButton: false,
+					timer: 1500
+				  })
 			}
 		});
 	});
-
+	$('.col-md-6').on('click','.set_shortcode',function(){
+		var channel_id = $('#channel_id').val();
+		var max_result = $('#max_result').val();
+		var shortcode ='[yf_video_list channelid="'+channel_id+'" maxresults="'+max_result+'"]';
+		Swal.fire({
+			title: 'Your shortcode',
+			text: shortcode,
+			showConfirmButton: false,
+			timer: 1500
+		  })
+	});
 })( jQuery );

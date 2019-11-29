@@ -52,13 +52,16 @@
 	};
 	$(document).ready(function(){
 		fix_height();
-
 	});
 	$('.pagination').on('click','.page-link',function(){
 		var pagetoken = $(this).attr("data-id");
-		yf_content(pagetoken);
+		var channelid = $('.channelid').val();
+		var maxresults = $('.maxresults').val();
+		console.log(channelid);
+		console.log(channelid);
+		yf_content(pagetoken,channelid,maxresults);
 	});
-	function yf_content(pagetoken){
+	function yf_content(pagetoken,channelid,maxresults){
 		$.ajax({
 			type: 'POST', 
 			url: yf.ajaxurl, 
@@ -67,6 +70,8 @@
 				'action': 'yf_list_pagi',
 				'ajax_nonce': yf.nonce,
 				'pagetoken': pagetoken,
+				'channelid': channelid,
+				'maxresults': maxresults,
 			},
 			success: function (response) {
 				$('.yf_content').empty();
@@ -75,8 +80,11 @@
 				var raw_slash = raw.replace(/\[/g,'');
 				var raw_comma= raw_slash.replace(/\,/g,'');
 				var result= raw_comma.replace(/\]/g,'');
+				var content = '<div class="row yf_content">' + response.inputhidden + result + '</div>';
 				var pagi ='<li class="page-item"><a class="page-link" data-id="'+response.prevPageToken+'">Previous</a></li><li class="page-item"><a class="page-link" data-id="'+response.nextPageToken+'">Next</a></li>';
-				$('.yf_content').html(result);
+				$('.channelid').val(response.channelid);
+				$('.maxresults').val(response.maxresults);
+				$('.yf_content').html(content);
 				$('.pagination').html(pagi);
 			}
 		});

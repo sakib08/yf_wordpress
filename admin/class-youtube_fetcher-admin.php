@@ -74,6 +74,7 @@ class Youtube_fetcher_Admin {
 		 */
 
 		wp_enqueue_style( $this->plugin_name . 'bootstrap', plugin_dir_url( __FILE__ ) . 'css/bootstrap.min.css', array(), $this->version, 'all' );
+		wp_enqueue_style( $this->plugin_name . 'sweetalert2', plugin_dir_url( __FILE__ ) . 'css/sweetalert2.min.css', array(), $this->version, 'all' );
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/youtube_fetcher-admin.css', array(), $this->version, false);
 
 	}
@@ -99,6 +100,7 @@ class Youtube_fetcher_Admin {
 		
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/youtube_fetcher-admin.js', array( 'jquery' ), $this->version, true );
 		wp_enqueue_script( $this->plugin_name. 'ajax_jquery' ,'https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js', array( 'jquery' ), $this->version, true );
+		wp_enqueue_script( $this->plugin_name. 'sweetalert2' ,plugin_dir_url( __FILE__ ) . 'js/sweetalert2.min.js', array( 'jquery' ), $this->version, true );
 		wp_localize_script( $this->plugin_name, 'yf', array(
             'ajaxurl' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('_wpnonce')
@@ -110,7 +112,8 @@ class Youtube_fetcher_Admin {
 		include_once $page_location;
 	}
 	public function add_menu() {
-		add_menu_page($this->plugin_name, "Youtube Fetcher", 'manage_options', 'Youtube_Fetcher', array($this, 'display_page'), null,3);
+		add_menu_page($this->plugin_name, "Youtube Fetcher", 'manage_options', 'Youtube_Fetcher', array($this, 'display_page'), 
+		plugin_dir_url( __FILE__ ) .'/img/iconfinder_youtube_317714.png',3);
 	}
 	public function list_yf_setting(){
 		global $wpdb;
