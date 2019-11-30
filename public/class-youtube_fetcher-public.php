@@ -145,7 +145,7 @@ class Youtube_fetcher_Public {
 						}
 				}
 			echo '</div>';
-			echo '<nav aria-label="Page navigation example"><ul class="pagination">
+			echo '<nav class="row"><ul class="pagination">
 			<li class="page-item"><a class="page-link" data-id="'.$video_list->prevPageToken.'">Previous</a></li>
 			<li class="page-item"><a class="page-link" data-id="'.$video_list->nextPageToken.'">Next</a></li></ul></nav>';
     	}

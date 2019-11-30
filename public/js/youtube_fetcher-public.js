@@ -54,11 +54,10 @@
 		fix_height();
 	});
 	$('.pagination').on('click','.page-link',function(){
+		$(this).hide();
 		var pagetoken = $(this).attr("data-id");
 		var channelid = $('.channelid').val();
 		var maxresults = $('.maxresults').val();
-		console.log(channelid);
-		console.log(channelid);
 		yf_content(pagetoken,channelid,maxresults);
 	});
 	function yf_content(pagetoken,channelid,maxresults){
@@ -86,6 +85,7 @@
 				$('.maxresults').val(response.maxresults);
 				$('.yf_content').html(content);
 				$('.pagination').html(pagi);
+				fix_height();
 			}
 		});
 	}
